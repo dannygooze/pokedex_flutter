@@ -143,6 +143,9 @@ class PokemonDetailState extends State<PokemonDetail> {
                               ],
                             ),
                             Row(
+                              children: <Widget>[Text("")],
+                            ),
+                            Row(
                               children: <Widget>[
                                 Text("Description:",
                                     style: TextStyle(
@@ -156,14 +159,14 @@ class PokemonDetailState extends State<PokemonDetail> {
                                       species.flavorTextEntries[1].flavorText),
                                   style: TextStyle(fontSize: 16)),
                             ),
-                            Row(
-                              children: <Widget>[
-                                Text("Evolution Chain:",
-                                    style: TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.bold)),
-                              ],
-                            ),
+                            // Row(
+                            //   children: <Widget>[
+                            //     Text("Evolution Chain:",
+                            //         style: TextStyle(
+                            //             fontSize: 16,
+                            //             fontWeight: FontWeight.bold)),
+                            //   ],
+                            // ),
                             //Add evolution chain with images that nav to evoled pokemon details
                           ],
                         ),
