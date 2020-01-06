@@ -1,37 +1,29 @@
-import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
+import 'package:pokedex_flutter/utitlities.dart';
+
 Future<Pokemon> fetchPokemon(int pokemonId) async {
-  final response =
-      await http.get('https://pokeapi.co/api/v2/pokemon/$pokemonId/');
+  final response = await http.get("$pokeApiUrl$pokemonId/");
 
   if (response.statusCode == 200) {
     return Pokemon.fromJson(json.decode(response.body));
   } else {
-    print(response);
     throw Exception('Failed to load pokemon');
   }
 }
 
-Widget buildPokemonRow(Pokemon pokemon) {
-  return ListTile(
-    title: Text(
-      '#$pokemon.id $pokemon.name',
-      style: TextStyle(
-        fontSize: 18.0, // insert your font size here
-      ),
-      textAlign: TextAlign.left,
-    ),
-    subtitle: Image.network(pokemon.sprites.frontDefault),
-    onTap: () {
-      // Navigator.push(
-      //   context,
-      //   MaterialPageRoute(
-      //       builder: (context) => RegionList(region: regions[index])),
-      // );
-    },
-  );
+Future<List<Pokemon>> getPokemonByRegion(int upperLimit, int lowerLimit) async {
+  var pokemonList = new List<Pokemon>();
+
+  for (var i = lowerLimit; i <= upperLimit; i++) {
+    Pokemon pokemon = await fetchPokemon(i);
+    if (pokemon != null) {
+      pokemonList.add(pokemon);
+    }
+  }
+
+  return pokemonList;
 }
 
 class Pokemon {
@@ -39,7 +31,6 @@ class Pokemon {
   String name;
   int baseExperience;
   int height;
-  bool isDefault;
   int order;
   int weight;
   Sprites sprites;
@@ -51,7 +42,6 @@ class Pokemon {
       this.name,
       this.baseExperience,
       this.height,
-      this.isDefault,
       this.order,
       this.weight,
       this.sprites,
@@ -63,7 +53,6 @@ class Pokemon {
     name = json['name'];
     baseExperience = json['base_experience'];
     height = json['height'];
-    isDefault = json['is_default'];
     order = json['order'];
     weight = json['weight'];
     sprites =
@@ -88,7 +77,6 @@ class Pokemon {
     data['name'] = this.name;
     data['base_experience'] = this.baseExperience;
     data['height'] = this.height;
-    data['is_default'] = this.isDefault;
     data['order'] = this.order;
     data['weight'] = this.weight;
     if (this.sprites != null) {
@@ -212,3 +200,33 @@ class Types {
     return data;
   }
 }
+
+//No longer used with refactor
+// Widget buildPokemonRow(Pokemon pokemon) {
+//   return ListTile(
+//     title: Row(
+//       children: <Widget>[
+//         Text(
+//           capitalize(pokemon.name),
+//           style: TextStyle(
+//             fontSize: 18.0,
+//           ),
+//           textAlign: TextAlign.left,
+//         ),
+//         Image.network(
+//           pokemon.sprites.frontDefault,
+//           height: 38,
+//           width: 38,
+//         )
+//       ],
+//       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//     ),
+//     onTap: () {
+//       // Navigator.push(
+//       //   context,
+//       //   MaterialPageRoute(
+//       //       builder: (context) => RegionList(region: regions[index])),
+//       // );
+//     },
+//   );
+// }
